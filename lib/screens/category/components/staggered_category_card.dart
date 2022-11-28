@@ -1,48 +1,29 @@
+import 'package:ecommerce_int2/models/new/order.dart';
 import 'package:flutter/material.dart';
 
-class CategoryCard extends StatelessWidget {
+import '../../../app_properties.dart';
+import '../../../services/remote_service.dart';
+
+class OrderCard extends StatelessWidget {
   final Color begin;
   final Color end;
-  final String categoryName;
-  final String assetPath;
+  final String orderName;
+  final Order order;
 
-  CategoryCard({
-    required this.controller,
+  OrderCard({
     required this.begin,
     required this.end,
-    required this.categoryName,
-    required this.assetPath,
-  })  : height = Tween<double>(begin: 150, end: 250.0).animate(
-          CurvedAnimation(
-            parent: controller,
-            curve: Interval(
-              0.0,
-              0.300,
-              curve: Curves.ease,
-            ),
-          ),
-        ),
-        itemHeight = Tween<double>(begin: 0, end: 150.0).animate(
-          CurvedAnimation(
-            parent: controller,
-            curve: Interval(
-              0.0,
-              0.300,
-              curve: Curves.ease,
-            ),
-          ),
-        );
+    required this.orderName,
+    required this.order
 
-  final Animation<double> controller;
-  final Animation<double> height;
-  final Animation<double> itemHeight;
+  });
 
-  // This function is called each time the controller "ticks" a new frame.
-  // When it runs, all of the animation's values will have been
-  // updated to reflect the controller's current value.
-  Widget _buildAnimation(BuildContext context, Widget? child) {
+  List<String>? searchResults = [];
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: height.value,
+      height: 150,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -57,7 +38,7 @@ class CategoryCard extends StatelessWidget {
           Align(
               alignment: Alignment(-1, 0),
               child: Text(
-                categoryName,
+                orderName,
                 style: TextStyle(
                     fontSize: 22,
                     color: Colors.white,
@@ -66,108 +47,138 @@ class CategoryCard extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
-//        mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(bottom: 16.0),
-                height: itemHeight.value,
-                child: Image.asset(
-                  assetPath,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(24))),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(
-                  'View more',
-                  style: TextStyle(color: end, fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: () => {
+                  //Navigator.of(context)
+                  //    .push(MaterialPageRoute(builder: (_) => NotificationsPage()))
+
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: Container(
+                              constraints: BoxConstraints(maxHeight: 450),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Order data',
+                                          style: TextStyle(
+                                            color: darkGrey,
+                                            fontSize: 22,
+                                          ),
+                                        ),
+                                        CloseButton()
+                                      ],
+                                    ),
+                                    Text(
+                                      'Date',
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      order.date.toString().split(" ").first,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Status',
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      order.status,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Address',
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      order.destAddress,
+                                      textAlign: TextAlign.justify,
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Products',
+                                      style: TextStyle(
+                                        color: darkGrey,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: ListView.builder(
+                                        itemCount: order.prods_aux.length,
+                                        itemBuilder: (_, index) => Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 4.0,
+                                          ),
+                                          child: Text(
+                                            order.prods_aux[index],
+                                            textAlign: TextAlign.justify,
+                                            style: TextStyle(
+                                              color: darkGrey,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ));
+                      })
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(24))),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Text(
+                    'View more',
+                    style: TextStyle(color: end, fontWeight: FontWeight.bold),
+                  ),
                 ),
               )
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      builder: _buildAnimation,
-      animation: controller,
-    );
-  }
-}
-
-class StaggeredCardCard extends StatefulWidget {
-  final Color begin;
-  final Color end;
-  final String categoryName;
-  final String assetPath;
-
-  const StaggeredCardCard({
-    required this.begin,
-    required this.end,
-    required this.categoryName,
-    required this.assetPath,
-  });
-
-  @override
-  _StaggeredCardCardState createState() => _StaggeredCardCardState();
-}
-
-class _StaggeredCardCardState extends State<StaggeredCardCard>
-    with TickerProviderStateMixin {
-  late AnimationController _controller;
-  bool isActive = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
-  }
-
-  Future<void> _playAnimation() async {
-    try {
-      await _controller.forward().orCancel;
-    } on TickerCanceled {
-      // the animation got canceled, probably because we were disposed
-    }
-  }
-
-  Future<void> _reverseAnimation() async {
-    try {
-      await _controller.reverse().orCancel;
-    } on TickerCanceled {
-      // the animation got canceled, probably because we were disposed
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var timeDilation = 10.0; // 1.0 is normal animation speed.
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        if (isActive) {
-          isActive = !isActive;
-          _reverseAnimation();
-        } else {
-          isActive = !isActive;
-          _playAnimation();
-        }
-      },
-      child: CategoryCard(
-        controller: _controller.view,
-        categoryName: widget.categoryName,
-        begin: widget.begin,
-        end: widget.end,
-        assetPath: widget.assetPath,
       ),
     );
   }

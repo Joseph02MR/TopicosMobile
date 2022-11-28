@@ -1,9 +1,46 @@
+import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/category.dart';
+import 'package:ecommerce_int2/screens/main/components/first_series.dart';
 import 'package:flutter/material.dart';
 import 'category_card.dart';
+import 'first_chart.dart';
 import 'recommended_list.dart';
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class TabView extends StatelessWidget {
+  final List<FirstSeries> data = [
+    FirstSeries(
+      year: "2017",
+      players: 60000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    FirstSeries(
+      year: "2018",
+      players: 50600,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    FirstSeries(
+      year: "2019",
+      players: 38500,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    FirstSeries(
+      year: "2020",
+      players: 35000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    FirstSeries(
+      year: "2021",
+      players: 12000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+    FirstSeries(
+      year: "2022",
+      players: 11000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.green),
+    ),
+  ];
   List<Category> categories = [
     Category(
       Color(0xffFCE183),
@@ -57,6 +94,11 @@ class TabView extends StatelessWidget {
         controller: tabController,
         children: <Widget>[
           Container(
+              constraints: BoxConstraints(maxHeight: 250),
+              child: FirstChart(
+                  data: data
+              )),
+          Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -64,12 +106,10 @@ class TabView extends StatelessWidget {
                     margin: EdgeInsets.all(8.0),
                     height: MediaQuery.of(context).size.height / 9,
                     width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (_, index) => CategoryCard(
-                              category: categories[index],
-                            ))),
+                    child: Container(
+
+                    )
+                ),
                 SizedBox(
                   height: 16.0,
                 ),
@@ -77,30 +117,8 @@ class TabView extends StatelessWidget {
               ],
             ),
           ),
-          Column(children: <Widget>[
-            SizedBox(
-              height: 16.0,
-            ),
-            Flexible(child: RecommendedList())
-          ]),
-          Column(children: <Widget>[
-            SizedBox(
-              height: 16.0,
-            ),
-            Flexible(child: RecommendedList())
-          ]),
-          Column(children: <Widget>[
-            SizedBox(
-              height: 16.0,
-            ),
-            Flexible(child: RecommendedList())
-          ]),
-          Column(children: <Widget>[
-            SizedBox(
-              height: 16.0,
-            ),
-            Flexible(child: RecommendedList())
-          ]),
+
+
         ]);
   }
 }

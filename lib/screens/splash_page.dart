@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
                 Expanded(
                   child: Opacity(
                       opacity: opacity.value,
-                      child: new Image.asset('assets/logo.png')),
+                      child: new Image.asset('assets/logo_store.png')),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

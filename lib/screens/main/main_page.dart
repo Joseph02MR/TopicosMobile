@@ -8,7 +8,7 @@ import 'package:ecommerce_int2/screens/search_page.dart';
 import 'package:ecommerce_int2/screens/shop/check_out_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../models/users.dart';
+import '../../models/new/users.dart';
 import 'components/custom_bottom_bar.dart';
 import 'components/product_list.dart';
 import 'components/tab_view.dart';
@@ -23,7 +23,7 @@ class MainPage extends StatefulWidget {
 
 List<String> timelines = ['Weekly featured', 'Best of June', 'Best of 2018'];
 String selectedTimeline = 'Weekly featured';
-
+/*
 List<Product> products = [
   Product(
       'assets/headphones_2.png',
@@ -41,7 +41,7 @@ List<Product> products = [
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ut labore et dolore magna aliqua. Nec nam aliquam sem et tortor consequat id porta nibh. Orci porta non pulvinar neque laoreet suspendisse. Id nibh tortor id aliquet. Dui sapien eget mi proin. Viverra vitae congue eu consequat ac felis donec. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui faucibus. Vulputate mi sit amet mauris commodo quis imperdiet. Vel fringilla est ullamcorper eget nulla facilisi etiam dignissim. Sit amet cursus sit amet dictum sit amet justo. Mattis pellentesque id nibh tortor. Sed blandit libero volutpat sed cras ornare arcu dui. Fermentum et sollicitudin ac orci phasellus. Ipsum nunc aliquet bibendum enim facilisis gravida. Viverra suspendisse potenti nullam ac tortor. Dapibus ultrices in iaculis nunc sed. Nisi porta lorem mollis aliquam ut porttitor leo a. Phasellus egestas tellus rutrum tellus pellentesque. Et malesuada fames ac turpis egestas maecenas pharetra convallis. Commodo ullamcorper a lacus vestibulum sed arcu non odio. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Eros in cursus turpis massa. Eget mauris pharetra et ultrices neque.',
       152.99),
 ];
-
+*/
 class _MainPageState extends State<MainPage>
     with TickerProviderStateMixin<MainPage> {
   late TabController tabController;
@@ -50,7 +50,7 @@ class _MainPageState extends State<MainPage>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 5, vsync: this);
+    tabController = TabController(length: 2, vsync: this);
     bottomTabController = TabController(length: 3, vsync: this);
   }
 
@@ -74,6 +74,7 @@ class _MainPageState extends State<MainPage>
       ),
     );
 
+    /*
     Widget topHeader = Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0),
         child: Row(
@@ -176,12 +177,15 @@ class _MainPageState extends State<MainPage>
           ],
         ));
 
+     */
+/*
     Widget tabBar = TabBar(
       tabs: [
         Tab(text: 'Trending'),
         Tab(text: 'Sports'),
         Tab(text: 'Headsets'),
         Tab(text: 'Wireless'),
+        Tab(text: 'Bluetooth'),
         Tab(text: 'Bluetooth'),
       ],
       labelStyle: TextStyle(fontSize: 16.0),
@@ -193,7 +197,7 @@ class _MainPageState extends State<MainPage>
       isScrollable: true,
       controller: tabController,
     );
-
+*/
     return Scaffold(
       bottomNavigationBar: CustomBottomBar(controller: bottomTabController),
       body: CustomPaint(
@@ -218,7 +222,7 @@ class _MainPageState extends State<MainPage>
                 ),
               ),
             ),
-            CategoryListPage(),
+            CategoryListPage(widget.userdata),
             //CheckOutPage(),
             ProfilePage(widget.userdata)
           ],

@@ -1,13 +1,13 @@
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/faq_page.dart';
-import 'package:ecommerce_int2/screens/home_dummy.dart';
-import 'package:ecommerce_int2/screens/payment/payment_page.dart';
+
+import 'package:ecommerce_int2/screens/new_screens/address_form.dart';
+import 'package:ecommerce_int2/screens/new_screens/user_form.dart';
 import 'package:ecommerce_int2/screens/settings/settings_page.dart';
-import 'package:ecommerce_int2/screens/tracking_page.dart';
-import 'package:ecommerce_int2/screens/wallet/wallet_page.dart';
+
 import 'package:flutter/material.dart';
 
-import '../models/users.dart';
+import '../models/new/users.dart';
 
 class ProfilePage extends StatelessWidget {
   final Users userdata;
@@ -62,7 +62,7 @@ class ProfilePage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               Text(
-                                'Actualizar Datos',
+                                'Update profile',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               )
                             ]),
@@ -75,42 +75,13 @@ class ProfilePage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 IconButton(
-                                  icon: Image.asset('assets/icons/wallet.png'),
+                                  icon: Image.asset('assets/icons/truck.png'),
                                   onPressed: () => Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (_) => HomeDummy())),
+                                          builder: (_) => AddressForm(userdata))),
                                 ),
                                 Text(
-                                  'Dirección',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                            /*Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Image.asset('assets/icons/truck.png'),
-                              onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => TrackingPage())),
-                            ),
-                            Text(
-                              'Shipped',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),*/
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Image.asset('assets/icons/card.png'),
-                                  onPressed: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (_) => PaymentPage())),
-                                ),
-                                Text(
-                                  'Pago',
+                                  'Address',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               ],
@@ -123,10 +94,10 @@ class ProfilePage extends StatelessWidget {
                                       'assets/icons/contact_us.png'),
                                   onPressed: () => Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          builder: (_) => HomeDummy())),
+                                          builder: (_) => UserForm(userdata))),
                                 ),
                                 Text(
-                                  'Mi perfil',
+                                  'My profile',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               ],
@@ -148,9 +119,11 @@ class ProfilePage extends StatelessWidget {
                   ),
                   trailing: Icon(Icons.chevron_right, color: yellow),
                   onTap: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => SettingsPage())),
+                      .push(MaterialPageRoute(builder: (_) => SettingsPage(userdata))),
                 ),
+                /*
                 Divider(),
+
                 ListTile(
                   title: Text('Help & Support'),
                   subtitle: Text('Help center and legal support'),
@@ -160,6 +133,7 @@ class ProfilePage extends StatelessWidget {
                     color: yellow,
                   ),
                 ),
+                */
                 Divider(),
                 ListTile(
                   title: Text('FAQ'),

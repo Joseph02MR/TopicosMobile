@@ -4,7 +4,7 @@ import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/screens/main/main_page.dart';
 import 'package:flutter/material.dart';
 
-import '../models/users.dart';
+import '../models/new/users.dart';
 
 class IntroPage extends StatefulWidget {
   final Users userdata;

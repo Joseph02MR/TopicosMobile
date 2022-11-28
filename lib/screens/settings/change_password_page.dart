@@ -1,20 +1,181 @@
 import 'package:ecommerce_int2/app_properties.dart';
+import 'package:ecommerce_int2/models/new/users.dart';
+import 'package:ecommerce_int2/screens/settings/settings_page.dart';
+import 'package:ecommerce_int2/services/remote_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordPage extends StatefulWidget {
+  final Users userdata;
+
+  ChangePasswordPage(this.userdata);
+  
   @override
   _ChangePasswordPageState createState() => _ChangePasswordPageState();
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  //TextEditingController old = TextEditingController();
+  TextEditingController new_pass = TextEditingController();
+  TextEditingController conf_pass = TextEditingController();
+
+
+  Future<bool> update_user_data() async {
+    if(new_pass.text == conf_pass.text){
+      Map<String, String> body = {
+        "password": new_pass.text,
+      };
+      return RemoteService().updateUser(body, widget.userdata.id);
+    }
+    else{
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 150),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Info',
+                              style: TextStyle(
+                                color: darkGrey,
+                                fontSize: 22,
+                              ),
+                            ),
+                            CloseButton()
+                          ],
+                        ),
+                        Text(
+                          'Error during password update: passwords don\'t match',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: darkGrey,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    ),
+                  ),
+                ));
+          });
+    }
+    return false;
+  }
+
+  _showSimpleModalDialog(context) async {
+    try {
+      await update_user_data();
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 150),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Info',
+                              style: TextStyle(
+                                color: darkGrey,
+                                fontSize: 22,
+                              ),
+                            ),
+                            CloseButton()
+                          ],
+                        ),
+                        Text(
+                          'password updated successfully',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: darkGrey,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    ),
+                  ),
+                ));
+          });
+    } catch (Error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 150),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Info',
+                              style: TextStyle(
+                                color: darkGrey,
+                                fontSize: 22,
+                              ),
+                            ),
+                            CloseButton()
+                          ],
+                        ),
+                        Text(
+                          'Error during password update',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: darkGrey,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    ),
+                  ),
+                ));
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double bottomPadding = MediaQuery.of(context).padding.bottom;
 
     Widget changePasswordButton = InkWell(
-      onTap: () {},
+      onTap: () {
+        _showSimpleModalDialog(context);
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => SettingsPage(widget.userdata)));
+        },
       child: Container(
         height: 80,
         width: width / 1.5,
@@ -68,7 +229,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 48.0,top:16.0),
+                            padding:
+                                const EdgeInsets.only(bottom: 48.0, top: 16.0),
                             child: Text(
                               'Change Password',
                               style: TextStyle(
@@ -77,7 +239,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   fontSize: 18.0),
                             ),
                           ),
-                          Padding(
+                          /*Padding(
                             padding: const EdgeInsets.only(bottom: 12.0),
                             child: Text(
                               'Enter your current password',
@@ -92,11 +254,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextField(
+                                controller: old,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Existing Password',
                                     hintStyle: TextStyle(fontSize: 12.0)),
                               )),
+                              
+                           */
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: 24, bottom: 12.0),
@@ -113,6 +278,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextField(
+                                controller: new_pass,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'New Password',
@@ -134,6 +300,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextField(
+                                controller: conf_pass,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Retype Password',

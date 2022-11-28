@@ -1,5 +1,6 @@
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/custom_background.dart';
+import 'package:ecommerce_int2/models/new/users.dart';
 import 'package:ecommerce_int2/screens/auth/welcome_back_page.dart';
 import 'package:ecommerce_int2/screens/settings/change_country.dart';
 import 'package:ecommerce_int2/screens/settings/change_password_page.dart';
@@ -10,6 +11,10 @@ import 'package:flutter/material.dart';
 import 'change_language_page.dart';
 
 class SettingsPage extends StatelessWidget {
+  final Users userdata;
+
+  SettingsPage(this.userdata);
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -91,7 +96,7 @@ class SettingsPage extends StatelessWidget {
                     title: Text('Change Password'),
                     leading: Image.asset('assets/icons/change_pass.png'),
                     onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => ChangePasswordPage())),
+                        MaterialPageRoute(builder: (_) => ChangePasswordPage(userdata))),
                   ),
                   ListTile(
                     title: Text('Sign out'),

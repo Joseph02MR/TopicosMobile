@@ -10,7 +10,7 @@ String usersToJson(List<Users> data) => json.encode(List<dynamic>.from(data.map(
 
 class Users {
   Users({
-    required this.token,
+    //required this.token,
     required this.street,
     required this.zip,
     required this.city,
@@ -61,7 +61,7 @@ class Users {
     image: json["image"],
     isAdmin: json["isAdmin"],
     role: json["role"],
-    token: json["token"]
+    //token: json["token"]
   );
 
   Map<String, dynamic> toJson() => {

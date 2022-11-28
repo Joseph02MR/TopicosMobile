@@ -1,14 +1,11 @@
 
 import 'package:ecommerce_int2/app_properties.dart';
-import 'package:ecommerce_int2/models/users.dart';
+import 'package:ecommerce_int2/models/new/users.dart';
 import 'package:ecommerce_int2/screens/intro_page.dart';
 import 'package:ecommerce_int2/services/remote_service.dart';
 import 'package:flutter/material.dart';
 
 //api imports
-import 'package:ecommerce_int2/models/category2.dart';
-
-import 'register_page.dart';
 
 class WelcomeBackPage extends StatefulWidget {
   @override
@@ -64,7 +61,7 @@ class _WelcomeBackPageState extends State<WelcomeBackPage> {
                 .push(MaterialPageRoute(builder: (_) => IntroPage(user!)));
           }else{
             final snackBar = SnackBar(
-              content: const Text('Error en inicio de sesión'),
+              content: const Text('Error logging into session'),
               action: SnackBarAction(
                 label: 'Undo',
                 onPressed: () {

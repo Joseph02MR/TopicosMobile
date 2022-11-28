@@ -1,4 +1,4 @@
-import 'package:ecommerce_int2/models/category2.dart';
+import 'package:ecommerce_int2/models/new/category2.dart';
 import 'package:ecommerce_int2/services/remote_service.dart';
 import 'package:flutter/material.dart';
 

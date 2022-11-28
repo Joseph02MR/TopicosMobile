@@ -1,17 +1,24 @@
 import 'package:ecommerce_int2/app_properties.dart';
 import 'package:ecommerce_int2/models/category.dart';
+import 'package:ecommerce_int2/models/new/users.dart';
+import 'package:ecommerce_int2/services/remote_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../models/new/order.dart';
 import 'components/staggered_category_card.dart';
 
 class CategoryListPage extends StatefulWidget {
+  final Users userdata;
+  var isLoaded = false;
+  CategoryListPage(this.userdata);
+
   @override
   _CategoryListPageState createState() => _CategoryListPageState();
 }
 
 class _CategoryListPageState extends State<CategoryListPage> {
-  List<Category> categories = [
+  /*List<Category> categories = [
     Category(
       Color(0xffFCE183),
       Color(0xffF68D7F),
@@ -49,14 +56,39 @@ class _CategoryListPageState extends State<CategoryListPage> {
       'assets/jeans_5.png',
     ),
   ];
+   */
 
-  List<Category> searchResults = [];
-  TextEditingController searchController = TextEditingController();
+  List<Order>? searchResults = [];
+  //TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    searchResults = categories;
+    //searchResults = categories
+    get_data();
+  }
+
+  get_data() async {
+    searchResults = await RemoteService().getUserOrders(widget.userdata.id);
+    print(searchResults?.length);
+    if (searchResults != null) {
+      setState(() {
+        widget.isLoaded = true;
+      });
+      searchResults?.forEach((element) {
+        get_products(element);
+      });
+      return;
+    }
+  }
+
+  void get_products(Order order) async {
+    try{
+      order.prods_aux = (await RemoteService().getOrderProducts(order.products))!;
+      print(order.prods_aux.length);
+    }catch(error){
+      order.prods_aux = [];
+    }
   }
 
   @override
@@ -72,9 +104,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
             Align(
               alignment: Alignment(-1, 0),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+                padding: EdgeInsets.symmetric(vertical: 18.0),
                 child: Text(
-                  'Category List',
+                  'Orders List',
                   style: TextStyle(
                     color: darkGrey,
                     fontSize: 22,
@@ -83,59 +115,29 @@ class _CategoryListPageState extends State<CategoryListPage> {
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(left: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.white,
-              ),
-              child: TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Search',
-                    prefixIcon: SvgPicture.asset(
-                      'assets/icons/search_icon.svg',
-                      fit: BoxFit.scaleDown,
-                    )),
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    List<Category> tempList = [];
-                    categories.forEach((category) {
-                      if (category.category.toLowerCase().contains(value)) {
-                        tempList.add(category);
-                      }
-                    });
-                    setState(() {
-                      searchResults.clear();
-                      searchResults.addAll(tempList);
-                    });
-                    return;
-                  } else {
-                    setState(() {
-                      searchResults.clear();
-                      searchResults.addAll(categories);
-                    });
-                  }
-                },
-              ),
-            ),
-            Flexible(
+            Visibility(
+              visible: widget.isLoaded,
+                child: Flexible(
               child: ListView.builder(
-                itemCount: searchResults.length,
+                itemCount: searchResults?.length,
                 itemBuilder: (_, index) => Padding(
                   padding: EdgeInsets.symmetric(
                     vertical: 16.0,
                   ),
-                  child: StaggeredCardCard(
-                    begin: searchResults[index].begin,
-                    end: searchResults[index].end,
-                    categoryName: searchResults[index].category,
-                    assetPath: searchResults[index].image,
+                  child: OrderCard(
+                    //begin: searchResults[index].begin,
+                    //end: searchResults[index].end,
+                    begin: Color(0xffFCE183),
+                    end: Color(0xffF68D7F),
+                    orderName: "Order ${index + 1}",
+                    order: searchResults![index],
+                    //assetPath: searchResults[index].image,
                   ),
                 ),
               ),
-            )
+            ), replacement: const Center(
+              child: CircularProgressIndicator(),
+            )),
           ],
         ),
       ),
